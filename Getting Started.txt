@@ -1,0 +1,17 @@
+//Getting Started 
+//Problem: Build a circuit with no inputs and one output. That output should always drive 1 (or logic high).
+//code:
+module top_module(output one );
+	assign one = 1'b1;
+endmodule
+
+
+//Output Zero
+//Problem:  Build a circuit with no inputs and one output that outputs a constant 0
+//code:
+module top_module(output zero);
+	assign zero =1'b0;
+endmodule
+
+
+
