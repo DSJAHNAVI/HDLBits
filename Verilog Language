@@ -1,0 +1,61 @@
+//Verilog language
+//Basics
+
+//1.Simple Wire
+//Create a module with one input and one output that behaves like a wire.
+//Code:
+module top_module( input in, output out );
+	assign out = in;
+endmodule
+
+
+//2.Four wires
+/*Create a module with 3 inputs and 4 outputs that behaves like wires that makes these connections:
+a -> w
+b -> x
+b -> y
+c -> z*/
+//Code:
+module top_module( 
+    input a,b,c,
+    output w,x,y,z );
+	  assign w = a;
+    assign x = b;
+    assign y = b;
+    assign z = c;
+    // or using the concatenation operator is equivalent and shorter:
+	  // assign {w,x,y,z} = {a,b,b,c};    
+endmodule
+
+
+//3.Inverter
+//Create a module that implements a NOT gate.
+//Code:
+module top_module( input in, output out );
+	assign out = ~in;
+endmodule
+
+//4.AND Gate
+//Create a module that implements an AND gate.
+//Code:
+module top_module( 
+    input a, 
+    input b, 
+    output out );
+    assign out = a&&b;
+endmodule
+
+//5.NOR Gate
+//Create a module that implements a NOR gate.
+//Code:
+module top_module( 
+    input a, 
+    input b, 
+    output out );
+    assign out = ~(a||b);
+endmodule
+
+//XNOR Gate
+//6.Create a module that implements an XNOR gate.
+//Code:
+
