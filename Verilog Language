@@ -35,6 +35,7 @@ module top_module( input in, output out );
 	assign out = ~in;
 endmodule
 
+
 //4.AND Gate
 //Create a module that implements an AND gate.
 //Code:
@@ -44,6 +45,7 @@ module top_module(
     output out );
     assign out = a&&b;
 endmodule
+
 
 //5.NOR Gate
 //Create a module that implements a NOR gate.
@@ -55,6 +57,7 @@ module top_module(
     assign out = ~(a||b);
 endmodule
 
+
 //6.XNOR Gate
 //Create a module that implements an XNOR gate.
 //Code:
@@ -64,6 +67,7 @@ module top_module(
     output out );
     assign out = ~(a^b);
 endmodule
+
 
 //7.Declaring wires
 //Code:
@@ -82,7 +86,8 @@ module top_module(
     assign out_n = ~z;
 endmodule
 
-//7458
+
+//8.7458 chip
 //The 7458 is a chip with four AND gates and two OR gates.
 //Code:
 module top_module ( 
