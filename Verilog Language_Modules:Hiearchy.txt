@@ -24,3 +24,56 @@ module top_module ( input a, input b,input c,input d,output out1,output out2);
     mod_a inst_1(.in1(a), .in2(b), .in3(c), .in4(d), .out1(out1), .out2(out2));
 endmodule
 
+
+//4.Three modules
+//Code:
+module top_module ( input clk, input d, output q );
+    wire x,y;
+    my_dff inst_1(.clk(clk),.d(d),.q(x));
+    my_dff inst_2(.clk(clk),.d(x),.q(y));
+    my_dff inst_3(.clk(clk),.d(y),.q(q));
+endmodule
+
+
+//5.Modules and Vectors 
+//Code:
+module top_module ( input clk,input [7:0] d, input [1:0] sel, output [7:0] q );
+    wire [7:0]x,y,z;
+    my_dff8(.clk(clk), .d(d), .q(x));
+    my_dff8(.clk(clk), .d(x), .q(y));
+    my_dff8(.clk(clk), .d(y), .q(z));
+      always @ (*) begin
+        case(sel)
+            0 : q = d ;
+            1 : q = x;
+            2 : q = y;
+            3 : q = z;
+        endcase
+      end 
+endmodule
+
+
+//6.Adder 1
+//Code:
+module top_module(input [31:0] a,input [31:0] b,output [31:0] sum);
+    wire cin,x,y;
+    add16 inst_1(a[15:0], b[15:0], cin, sum[15:0], x);
+    add16 inst_2(a[31:16], b[31:16],x, sum[31:16], y);
+    assign cin = 1'b0;
+endmodule
+
+//7.Adder 2
+//Code:
+module top_module (input [31:0] a,input [31:0] b,output [31:0] sum);
+  	wire x,y;
+    add16 adder_1(a[15:0], b[15:0], 0 , sum[15:0], x);
+    add16 adder_2(a[31:16], b[31:16], x, sum[31:16], y);
+endmodule  
+module add1 ( input a, input b, input cin,output sum, output cout );
+    assign sum  = a^b^cin;
+    assign cout = (a&b)|(a&cin)|(b&cin);
+endmodule
+
+//
+
+
