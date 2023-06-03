@@ -1,0 +1,26 @@
+//Verilog Language_Modules:Hiearchy
+
+//1.Modules
+//Code:
+module top_module (input a,input b,output out);
+	// Create an instance of "mod_a" named "inst1", and connect ports by name:
+	mod_a inst1 ( .in1(a),  //[Port"in1"connects to wire "a"]     .in2(b),	// [Port "in2" connects to wire "b"]     .out(out)	// [Port "out" connects to wire "out" ]);
+/*
+	// Create an instance of "mod_a" named "inst2", and connect ports by position:
+	mod_a inst2 ( a, b, out );	// The three wires are connected to ports in1, in2, and out, respectively.
+*/	
+endmodule
+
+
+//2.Connecting ports by position
+//Code:
+module top_module ( input a, input b, input c,input d,output out1,output out2);
+    mod_a inst_1( out1, out2, a, b, c, d );
+endmodule
+
+//3.Connecting ports by name
+//Code:
+module top_module ( input a, input b,input c,input d,output out1,output out2);
+    mod_a inst_1(.in1(a), .in2(b), .in3(c), .in4(d), .out1(out1), .out2(out2));
+endmodule
+
