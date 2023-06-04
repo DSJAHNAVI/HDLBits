@@ -1,5 +1,6 @@
 //Verilog Language_Procedures
 
+
 //1. Always blocks(combinational)
 //Code:
 
@@ -24,6 +25,7 @@ module top_module(input clk,input a,input b,
     end
 endmodule
 
+
 //3.If statement
 //Code:
 module top_module(input a,input b,input sel_b1,input sel_b2,
@@ -39,24 +41,107 @@ module top_module(input a,input b,input sel_b1,input sel_b2,
     end
 endmodule
 
+
 //4.If statement latches
 //Code:
+module top_module (input  cpu_overheated,output reg shut_off_computer,
+                   input arrived,input gas_tank_empty,output reg keep_driving  ); 
+    always @(*) begin
+        if (cpu_overheated) begin
+           shut_off_computer = 1;
+        end
+        else begin
+            shut_off_computer = 0;
+        end
+    end
+    always @(*) begin
+        if (~arrived) begin
+           keep_driving = ~gas_tank_empty;
+   		end
+        else begin
+            keep_driving = gas_tank_empty;
+        end
+    end
+endmodule
 
 
 //5.Case Statement
 //Code:
+module top_module ( input [2:0] sel, input [3:0] data0, input [3:0] data1, input [3:0] data2,
+                   input [3:0] data3, input [3:0] data4, input [3:0] data5, output reg [3:0] out);
+    always@(*) begin 
+        case(sel)
+            0 : out = data0;
+            1 : out = data1;
+            2 : out = data2;
+            3 : out = data3;
+            4 : out = data4;
+            5 : out = data5;
+            default: out = 1'b0;
+        endcase
+    end
+endmodule
 
 
 //6.Priority Encoder
 //Code:
+module top_module (input [3:0] in,output reg [1:0] pos);
+        always @(*) begin
+        if (in[0]==1'b1)
+            pos = 0;
+        else if (in[1]==1'b1)
+            pos = 1;
+        else if (in[2]==1'b1)
+            pos = 2;
+        else if (in[3]==1'b1)
+            pos = 3;
+        else
+            pos = 0;
+        end
+endmodule
 
 
 //7.Priority Encoder with casez
 //Code:
+module top_module (input [7:0] in,output reg [2:0] pos);
+    always @(*) begin    
+        casez (in[7:0])
+        8'bzzzzzzz1: pos = 000;
+        8'bzzzzzz1z: pos = 001;
+        8'bzzzzz1zz: pos = 010;
+        8'bzzzz1zzz: pos = 011;
+        8'bzzz1zzzz: pos = 100;
+        8'bzz1zzzzz: pos = 101;
+        8'bz1zzzzzz: pos = 110;
+        8'b1zzzzzzz: pos = 111;
+        default: pos = 0;
+        endcase
+    end
+endmodule
 
 
 //8.Avoiding latches
 //Code:
+module top_module (input [15:0] scancode,output reg left,
+                   output reg down,output reg right,output reg up  ); 
+    always @(scancode) begin
+    up = 1'b0; down = 1'b0; left = 1'b0; right = 1'b0;
+    case (scancode)
+		16'he06b:begin
+         	up = 1'b0; down = 1'b0; left = 1'b1; right = 1'b0;
+        end
+        16'he072:begin
+            up = 1'b0; down = 1'b1; left = 1'b0; right = 1'b0;
+        end
+        16'he074:begin
+                up = 1'b0; down = 1'b0; left = 1'b0; right = 1'b1;
+        end
+        16'he075:begin
+                up = 1'b1; down = 1'b0; left = 1'b0; right = 1'b0;
+        end     
+    endcase
+	    end
+endmodule
 
 
 
