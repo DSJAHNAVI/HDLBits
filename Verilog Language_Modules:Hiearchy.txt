@@ -4,10 +4,10 @@
 //Code:
 module top_module (input a,input b,output out);
 	// Create an instance of "mod_a" named "inst1", and connect ports by name:
-	mod_a inst1 ( .in1(a),  //[Port"in1"connects to wire "a"]     .in2(b),	// [Port "in2" connects to wire "b"]     .out(out)	// [Port "out" connects to wire "out" ]);
+	mod_a inst1 ( .in1(a), .in2(b), .out(out));
 /*
-	// Create an instance of "mod_a" named "inst2", and connect ports by position:
-	mod_a inst2 ( a, b, out );	// The three wires are connected to ports in1, in2, and out, respectively.
+// Create an instance of "mod_a" named "inst2", and connect ports by position:
+mod_a inst2 ( a, b, out );	// The three wires are connected to ports in1, in2, and out, respectively.
 */	
 endmodule
 
@@ -17,6 +17,7 @@ endmodule
 module top_module ( input a, input b, input c,input d,output out1,output out2);
     mod_a inst_1( out1, out2, a, b, c, d );
 endmodule
+
 
 //3.Connecting ports by name
 //Code:
@@ -62,6 +63,7 @@ module top_module(input [31:0] a,input [31:0] b,output [31:0] sum);
     assign cin = 1'b0;
 endmodule
 
+
 //7.Adder 2
 //Code:
 module top_module (input [31:0] a,input [31:0] b,output [31:0] sum);
@@ -74,6 +76,32 @@ module add1 ( input a, input b, input cin,output sum, output cout );
     assign cout = (a&b)|(a&cin)|(b&cin);
 endmodule
 
-//
+
+//8. Carry Select Adder
+//Code:
+module top_module(input [31:0] a,input [31:0] b,output [31:0] sum);
+    wire [15:0] cout,cout1,sum1,sum2;
+    add16 inst_1( a[15:0], b[15:0], 0 , sum[15:0] , cout);
+    add16 inst_sel1( a[31:16], b[31:16], 0 , sum1 , cout1);
+    add16 inst_sel2( a[31:16], b[31:16], 1 , sum2 , cout1);
+    always @(cout,sum1,sum2) begin
+        case(cout)
+            0 : sum[31:16] = sum1;
+            1 : sum[31:16] = sum2;
+        endcase
+    end
+endmodule
+    
+    
+//9.Adder-Subtractor
+//Code:
+module top_module(input [31:0] a, input [31:0] b, input sub, output [31:0] sum);
+    wire [31:0] x;
+    wire [15:0] cout1,cout2;
+    assign x = b^{32{sub}};
+    add16 inst_1(a[15:0], x[15:0] , sub, sum[15:0], cout1);
+    add16 inst_2(a[31:16], x[31:16] , cout1 , sum[31:16], cout2);  
+endmodule
+    
 
 
