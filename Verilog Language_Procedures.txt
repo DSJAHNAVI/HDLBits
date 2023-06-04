@@ -1,0 +1,62 @@
+//Verilog Language_Procedures
+
+//1. Always blocks(combinational)
+//Code:
+
+module top_module(input a, input b,output wire out_assign,output reg out_alwaysblock);
+    assign out_assign = a && b;
+    always @(*) begin
+        out_alwaysblock = a&&b;
+    end
+endmodule
+
+
+//2.Always block(clocked)
+//Code:
+module top_module(input clk,input a,input b,
+                  output wire out_assign,output reg out_always_comb,output reg out_always_ff);
+	assign out_assign = a^b;
+    always @(*) begin
+        out_always_comb = a^b;
+    end
+    always @(posedge clk) begin
+        out_always_ff = a^b;
+    end
+endmodule
+
+//3.If statement
+//Code:
+module top_module(input a,input b,input sel_b1,input sel_b2,
+                  output wire out_assign,output reg out_always); 
+    assign out_assign = (sel_b1 & sel_b2)? b : a;
+    always @(*) begin
+        if(sel_b1  & sel_b2) begin
+            out_always = b;
+        end
+        else begin
+            out_always = a;
+        end
+    end
+endmodule
+
+//4.If statement latches
+//Code:
+
+
+//5.Case Statement
+//Code:
+
+
+//6.Priority Encoder
+//Code:
+
+
+//7.Priority Encoder with casez
+//Code:
+
+
+//8.Avoiding latches
+//Code:
+
+
+
