@@ -59,7 +59,7 @@ module top_module (input  cpu_overheated,output reg shut_off_computer,
            keep_driving = ~gas_tank_empty;
    		end
         else begin
-            keep_driving = gas_tank_empty;
+            keep_driving = 0;
         end
     end
 endmodule
