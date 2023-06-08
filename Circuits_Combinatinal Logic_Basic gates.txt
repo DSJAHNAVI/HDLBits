@@ -1,0 +1,129 @@
+//1.Wire
+//Code:
+module top_module (input in,output out);
+	assign out = in;    
+endmodule
+
+
+//2.GND
+//Code:
+module top_module (output out);
+	assign out = 1'b0;
+endmodule
+
+
+//3.NOR
+//Code:
+module top_module (input in1,input in2,output out);
+    assign out = ~(in1|in2);
+endmodule
+
+
+//4.Another gate
+//Code:
+module top_module (input in1,input in2,output out);
+	assign out = in1 & ~in2;
+endmodule
+
+
+//5.Two gates
+//Code:
+module top_module (input in1,input in2,input in3,output out);
+    wire x;
+    assign x = ~(in1^in2);
+    assign out = x^in3;
+endmodule
+
+
+//6.More logic gates
+//Code:
+module top_module( input a, b,output out_and,output out_or,output out_xor,
+   				   output out_nand,output out_nor,output out_xnor,output out_anotb);
+    assign out_and   = a&b;
+    assign out_or    = a|b;
+    assign out_xor   = a^b;
+    assign out_nand  = ~(a&b);
+    assign out_nor   = ~(a|b);
+    assign out_xnor  = ~(a^b);
+    assign out_anotb =  a&~b;
+endmodule
+
+
+//7.7420 chip
+//Code:
+module top_module ( input p1a, p1b, p1c, p1d,output p1y,
+    				input p2a, p2b, p2c, p2d,output p2y );
+    assign p1y = ~(p1a & p1b & p1c & p1d);
+    assign p2y = ~(p2d & p2c & p2b & p2a);
+endmodule
+
+
+//8.Truth tables
+//Code:
+module top_module( input x3,input x2,input x1,output f);
+    assign f = (~x1&x2&~x3) | (x1&x2&~x3) | (x1&~x2&x3) | (x1&x2&x3);
+endmodule
+
+
+
+//9.Two-bit equality
+//Code:
+module top_module ( input [1:0] A, input [1:0] B, output z ); 
+    assign z = (A==B);
+endmodule
+
+
+//10.Simple circuit A
+//Code:
+module top_module (input x, input y, output z);
+    assign z = (x^y) & x;
+endmodule
+
+
+//11.Simple circuit B
+//Code:
+module top_module ( input x, input y, output z );
+    assign z = ~(x^y);
+endmodule
+
+
+//12.Combine circuits A and B
+//Code:
+module top_module (input x, input y, output z);
+    wire z1, z2, z3, z4,z5,z6;   
+    A IA1(x,y,z1);
+    B IB1(x,y,z2);
+    A IA2(x,y,z3);
+    B IB2(x,y,z4);   
+    assign z5 = z1||z2;
+    assign z6 = z3&&z4;
+    assign  z = z5^z6;
+endmodule
+
+module B( input x, input y, output z );
+    assign z= ~(x^y);
+endmodule
+
+module A(input x, input y, output z);
+    assign z = (x^y) & x;
+endmodule
+
+//13.Ring or vibrate
+//Code:
+
+
+//14.Thermostat
+//Code:
+
+
+//15.3-bit population count
+//Code:
+
+
+//16.Gates and vectors
+//Code:
+
+
+//17.Even longer vectors
+//Code:
+
