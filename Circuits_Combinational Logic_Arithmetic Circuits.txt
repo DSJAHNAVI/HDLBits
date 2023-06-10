@@ -1,0 +1,86 @@
+//1.Half adder
+//Code:
+module top_module( input a, b,output cout, sum );
+	assign sum = a^b;
+    assign cout = a&b;
+endmodule
+
+
+//2.Full adder
+//Code:
+module top_module( input a, b, cin,output cout, sum );
+	assign sum = a^b^cin;
+    assign cout = a&b | b&cin | cin&a;
+endmodule
+
+
+//3.3-bit binary adder
+//Code:
+module top_module( input [2:0] a, b,input cin,output [2:0] cout,output [2:0] sum );
+    full_adder inst1(a[0],b[0],cin,cout[0],sum[0]);
+    full_adder inst2(a[1],b[1],cout[0],cout[1],sum[1]);
+    full_adder inst3(a[2],b[2],cout[1],cout[2],sum[2]);        
+endmodule
+                     
+module full_adder( input a, b, cin,output cout, sum );
+	assign sum = a^b^cin;
+    assign cout = a&b | b&cin | cin&a;
+endmodule
+
+
+//4.Adder
+//Code:
+module top_module (input [3:0] x,input [3:0] y, output [4:0] sum);
+    wire cin,cout[3:0];
+    full_adder inst1(x[0],y[0],cin,cout[0],sum[0]);
+    full_adder inst2(x[1],y[1],cout[0],cout[1],sum[1]);
+    full_adder inst3(x[2],y[2],cout[1],cout[2],sum[2]);
+    full_adder inst4(x[3],y[3],cout[2],sum[4],sum[3]); 
+endmodule
+                     
+module full_adder( input a, b, cin,output cout, sum );
+	assign sum = a^b^cin;
+    assign cout = a&b | b&cin | cin&a;
+endmodule
+
+//5.Signed addition overflow
+//Code:
+module top_module (input [7:0] a,input [7:0] b,output [7:0] s,output overflow);
+    assign s = a+b;
+    assign overflow = a[7]&&b[7]&&(~s[7]) || (~a[7])&&(~b[7])&&(s[7]); 
+endmodule
+
+module top_m( input a, b, cin,output cout, sum );
+	assign cout = a&b | b&cin | a&cin;
+	assign sum  = a^b^cin;
+endmodule
+
+//6. 100 bit binary adder
+//Code:
+module top_module( input [99:0] a, b,input cin,output cout,output [99:0] sum );
+    genvar i;
+    wire [98:0]con_vect;
+    one_bit_FA FA1(a[0],b[0],cin,con_vect[0],sum[0]);
+    one_bit_FA FA2(a[99],b[99],con_vect[98],cout,sum[99]);
+    generate
+        for (i=1; i<99; i=i+1) begin : Full_adder_block
+            one_bit_FA FA(a[i],b[i],con_vect[i-1],con_vect[i],sum[i]);
+    end   
+    endgenerate   
+endmodule
+
+module one_bit_FA(input a,b,input cin,output cout,sum);
+    assign sum  = a^b^cin;
+    assign cout = (a&b)|(b&cin)|(cin&a);
+endmodule
+
+//7. 4 digit BCD adder
+//Code:
+module top_module ( input [15:0] a, b,input cin,output cout,output [15:0] sum );
+    wire [2:0]con1;
+    bcd_fadd B_add1(a[3:0],b[3:0],cin,con1[0],sum[3:0]);
+    bcd_fadd B_add2(a[7:4],b[7:4],con1[0],con1[1],sum[7:4]);
+    bcd_fadd B_add3(a[11:8],b[11:8],con1[1],con1[2],sum[11:8]);
+    bcd_fadd B_add4(a[15:12],b[15:12],con1[2],cout,sum[15:12]);
+endmodule
+
