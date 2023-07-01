@@ -1,3 +1,73 @@
+//1. 3 variable kmap1
+//code:
 module top_module(input a,input b,input c,output out); 
 	assign out = a||b||c;
 endmodule
+
+
+//2. 4 variable kmap2
+//code:
+module top_module(input a,input b,input c,input d,output out);
+    assign out = (~c&~b) | (~a&~d) | (b&c&d) | (a&~b&d);
+endmodule
+
+
+//3. 4 variable kmap3
+//code:
+module top_module(input a,input b,input c,input d,output out  ); 
+    assign out = a|(~a&~b&c);
+endmodule
+
+
+//4. 4 variable kmap4
+//code:
+module top_module(input a,input b,input c,input d,output out  ); 
+	assign out = a^b^c^d;
+endmodule
+
+
+//5. Min SOP & POS
+//code:
+module top_module (input a,input b,input c,input d,output out_sop,output out_pos); 
+    assign out_sop = (c&d)|(~a&~b&c);
+    assign out_pos = c&(~b|~c|d)&(~a|~c|d);
+endmodule
+
+//6. Karnaugh map
+//Code:
+module top_module (input [4:1] x, output f );
+    assign f = x[1]&x[2]&~x[3] | ~x[1]&x[3] | x[3]&x[4];
+endmodule
+
+
+//7. Karnaugh map
+//Code:
+module top_module (input [4:1] x,output f);
+    assign f = (~x[4]&~x[2])|(x[3]&x[4]&x[2])|(x[3]&~x[1]);
+endmodule
+
+
+//8. Kmap implemented with mux
+//Code:
+module top_module (input c,input d,output [3:0] mux_in); 
+	assign mux_in[0] = c | d;
+    assign mux_in[1] = 0;
+    assign mux_in[2] = ~d;
+    assign mux_in[3] = c & d;
+endmodule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
