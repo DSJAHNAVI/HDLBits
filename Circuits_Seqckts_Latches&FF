@@ -165,19 +165,60 @@ module top_module (input clk,input j,input k,output Q);
     end          
 endmodule
 
-//15.
+//15.edgedetect
 //Code:
+module top_module (input clk,input [7:0] in,output [7:0] pedge);
+    reg [7:0] in_temp;
+    integer i;
+    always @(posedge clk) begin
+    	in_temp <= in;
+        for(i=0; i<8; i++) begin
+            if((in_temp[i] == 0) & (in[i] == 1)) pedge[i] <= 1;
+            else pedge[i] <= 0;
+        end
+    end
+endmodule
 
 
-//16.
+//16.edgedetect2
 //Code:
+module top_module (input clk,input [7:0] in,output [7:0] anyedge);
+    reg [7:0] in_last;
+    always @(posedge clk) begin
+        in_last <= in;
+        anyedge <= in ^ in_last;
+    end
+endmodule
 
 
-//17.
+//17.edge capture register
 //Code:
+module top_module (input clk,input reset,input [31:0] in,output [31:0] out);
+    reg [31:0] in_last;	
+    always @(posedge clk) begin
+        in_last <= in;
+        if(reset) out <= 0;
+        else begin
+            out <= out | (in_last & ~in);
+        end
+    end  
+endmodule
 
-//18.
+
+//18.dual edge
 //Code:
+module top_module (input clk,input d,output q);
+    reg [1:0] status;  
+    always @(posedge clk) begin
+        status[0] <= d;
+    end    
+    always @(negedge clk) begin
+        status[1] <= d; 
+    end
+    assign q = (clk) ? status[0] : status[1];
+endmodule
+
+
 
 
 
