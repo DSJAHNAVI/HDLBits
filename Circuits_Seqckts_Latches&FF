@@ -1,0 +1,183 @@
+//1.D FF
+//Code:
+module top_module (input clk,input d,output reg q );
+	always @(posedge clk)
+        begin
+        q <= d;
+        end
+endmodule
+
+
+//2.D FF8
+//Code:
+module top_module (input clk,input [7:0] d,output [7:0] q);
+    always @(posedge clk)
+        begin
+            q[7:0] = d[7:0];
+        end
+endmodule
+
+
+
+//3.D FF8R
+//Code:
+module top_module (input clk,input reset,input [7:0] d,output [7:0] q);
+    always @(posedge clk)
+        begin
+            if(reset) q <=0;
+            else q[7:0] <= d[7:0];
+        end
+endmodule
+
+
+//4.D FF8RV(negedge)
+//Code:
+module top_module (input clk,input reset,input [7:0] d,output [7:0] q);
+    always @(negedge clk)
+        begin
+            if(reset) q <= 8'h34;
+            else q[7:0] <= d[7:0];
+        end
+endmodule
+
+
+//5.D FF8AR
+//Code:
+module top_module (input clk,input areset, input [7:0] d,output [7:0] q);
+    always @(posedge clk or posedge areset)
+        begin
+            if(areset) q <= 8'h00;
+            else q[7:0] <= d[7:0];
+        end
+endmodule
+
+
+//6.Dff16e
+//Code:
+module top_module (input clk,input resetn,input [1:0] byteena,input [15:0] d,output [15:0] q);
+    always @(posedge clk)
+        begin
+            if (byteena==2'b10 && resetn==1'b1) q[15:8] <= d[15:8];
+            else if (byteena==2'b01 && resetn ==1'b1) q[7:0] <= d[7:0];
+            else if (byteena ==(2'b00 | 2'b11) && resetn ==1'b1) q<=d;
+            else if (resetn == 1'b0) q = 1'b0;
+        end
+endmodule
+//or
+module top_module (input clk,input resetn,input [1:0] byteena,input [15:0] d,output [15:0] q);
+	always @ (posedge clk) begin
+        if (resetn==1'b0) q<= 1'b0;
+        else begin
+            case(byteena)
+				        2'b00: q       <= q;
+                2'b01: q[7:0]  <= d[7:0];
+                2'b10: q[15:8] <= d[15:8];
+                2'b11: q       <= d;
+            endcase
+        end
+    end	
+endmodule
+
+
+//7.D latch
+//Code:
+module top_module (input d, input ena,output q);
+    always @(*) begin
+        if(ena==1'b1) q <= d;
+    end
+endmodule
+
+
+//8.DFF
+//Code:
+module top_module (input clk,input d, input ar,output q);
+    always @(posedge clk or posedge ar)
+        begin
+            if(ar) q<=1'b0;
+            else q<=d;
+        end
+endmodule
+
+
+//9. DFF2
+//Code:
+module top_module (input clk,input d, input r,output q);
+    always @(posedge clk) begin
+        if(r) q<=0;
+        else q<=d;
+    end
+endmodule
+
+
+//10. Dff(xor)
+//Code:
+module top_module (input clk,input in, output out);
+    always @(posedge clk) begin
+        out = out^in;
+    end
+endmodule
+
+
+//11. Mux & DFF
+//Code:
+module top_module (input clk,input L,input r_in,input q_in,output reg Q);
+    always @(posedge clk) begin
+        if(L) Q<=r_in;
+        else Q<=q_in;
+    end
+endmodule
+
+
+//12. Mux & DFF 2
+//Code:
+module top_module (input clk,input w, R, E, L,output Q);
+    always @(posedge clk) begin
+        if(E==1'b0&&L==1'b0) Q<=Q;
+        else if(E==1'b1&&L==1'b0) Q<=w;
+        else if(L==1'b1) Q<=R;
+    end
+endmodule
+
+
+//13.DFF & gates
+//Code:
+module top_module (input clk,input x,output z);
+    reg [2:0]	Q;
+    always @(posedge clk) begin
+        Q[0] <= Q[0] ^ x;
+        Q[1] <= ~Q[1] & x;
+        Q[2] <= ~Q[2] | x;
+    end 
+    assign z = ~(| Q);
+endmodule
+
+
+//14.ckt from tt
+//Code:
+module top_module (input clk,input j,input k,output Q); 
+    always @(posedge clk) begin
+        case({j,k})
+            2'b00: Q <= Q;
+            2'b01: Q <= 1'b0;
+            2'b10: Q <= 1'b1;
+            2'b11: Q <= !Q;
+        endcase
+    end          
+endmodule
+
+//15.
+//Code:
+
+
+//16.
+//Code:
+
+
+//17.
+//Code:
+
+//18.
+//Code:
+
+
+
