@@ -1,0 +1,457 @@
+//1.Fsm1
+//Code:
+module top_module(input clk,input areset,input in,output out);
+    parameter A=0, B=1; 
+    reg state, next_state;
+    always @(*) begin    // This is a combinational always block
+        // State transition logic
+        case(state)
+            A: next_state <= in? A : B;
+            B: next_state <= in? B : A; 
+        endcase
+    end
+    always @(posedge clk, posedge areset) begin    // This is a sequential always block
+        // State flip-flops with asynchronous reset
+        if(areset) state <=B;
+        else 
+            state <= next_state;
+    end
+    assign out = (state == B);
+endmodule
+
+
+//2.Fsm1s
+//Code:
+module top_module(clk, reset, in, out);
+    input clk;
+    input reset;   
+    input in;
+    output out; 
+    reg out;
+    parameter A = 0, B = 1; 
+    reg present_state, next_state;
+    always @(posedge clk) begin
+        if (reset) present_state <= B;
+        else 
+            present_state <= next_state;
+    end
+    always@(*) begin
+            case (present_state)
+            A: next_state <= in ? A : B;
+            B: next_state <= in ? B : A;
+            endcase
+    end
+    assign out = (present_state == B);
+endmodule
+
+
+//3.Fsm2
+//Code:
+module top_module(input clk,input areset,input j,input k,output out);  
+    parameter OFF=0, ON=1; 
+    reg state, next_state;
+    always @(*) begin
+        case(state)
+            OFF : next_state <= j ? ON : OFF;
+            ON  : next_state <= k ? OFF: ON;
+        endcase    
+    end
+
+    always @(posedge clk, posedge areset) begin
+        if (areset) state<= OFF;
+        else
+            state <= next_state;
+    end
+    assign out = (state == ON);
+endmodule
+
+
+//4.Fsm2s
+//Code:
+module top_module(input clk,input reset,input j,input k,output out);
+    parameter OFF=0, ON=1; 
+    reg state, next_state;
+    always @(*) begin
+        case(state)
+            OFF : next_state <= j ? ON : OFF;
+            ON  : next_state <= k ? OFF: ON;
+        endcase   
+    end
+    always @(posedge clk) begin
+        if(reset) state <= OFF;
+        else 
+            state <= next_state;
+    end
+    assign out = (state == ON);
+endmodule
+
+
+//5.Fsm3comb
+//Code:
+module top_module(input in,input [1:0] state,output [1:0] next_state,output out); 
+    parameter A=0, B=1, C=2, D=3;
+    always @(*) begin
+        case(state)
+            A : next_state <=in ? B:A;
+            B : next_state <=in ? B:C;
+            C : next_state <=in ? D:A;
+            D : next_state <=in ? B:C;
+        endcase
+    end
+    assign out = (state==D);
+endmodule
+
+
+//6.Fsm3onehot
+//Code:
+module top_module(input in,input [3:0] state,output [3:0] next_state,output out); 
+    parameter A=0, B=1, C=2, D=3;
+    assign next_state[A] = state[A] & (~in) | state[C] & (~in);
+    assign next_state[B] = state[A] & in | state[B] & in | state[D] & in;
+    assign next_state[C] = state[B] & (~in) | state[D] & (~in);
+    assign next_state[D] = state[C] & (in);
+    assign out = (state [D] == 1);
+endmodule
+
+
+//7.Fsm3
+//Code:
+module top_module(input clk,input in,input areset,output out);
+    parameter A=0, B=1, C=2, D=3; 
+    reg [2:0]state, next_state;
+    always @(*) begin
+        case(state)
+		    A : next_state <=in ? B:A;
+            B : next_state <=in ? B:C;
+            C : next_state <=in ? D:A;
+            D : next_state <=in ? B:C;
+        endcase    
+    end
+    always @(posedge clk, posedge areset) begin
+        if (areset) state<= A;
+        else
+            state <= next_state;
+    end
+    assign out = (state == D);
+endmodule
+
+
+//8.Fsm3s
+//Code:
+module top_module(input clk,input in,input reset,output out); 
+    parameter A=0, B=1, C=2, D=3; 
+    reg [2:0]state, next_state;
+    always @(*) begin
+        case(state)
+		    A : next_state <=in ? B:A;
+            B : next_state <=in ? B:C;
+            C : next_state <=in ? D:A;
+            D : next_state <=in ? B:C;
+        endcase    
+    end
+    always @(posedge clk) begin
+        if (reset) state<= A;
+        else
+            state <= next_state;
+    end
+    assign out = (state == D);
+endmodule
+
+
+//9.Design a moore FSM
+//Code:
+module top_module (input clk,input reset,input [3:1] s,output fr3,output fr2,output fr1,output dfr); 
+    parameter A2 = 0, B1 = 1, B2 = 2, C1 = 3, C2 = 4, D1 = 5;
+    reg [2:0] state, next;
+    always @(posedge clk) begin
+        if (reset)state <= A2;
+        else 
+            state <= next;
+    end
+    always @(*) begin
+        case (state)
+            A2: next = s[1] ? B1 : A2;
+            B1: next = s[2] ? C1 : (s[1] ? B1 : A2);
+            B2: next = s[2] ? C1 : (s[1] ? B2 : A2);
+            C1: next = s[3] ? D1 : (s[2] ? C1 : B2);
+            C2: next = s[3] ? D1 : (s[2] ? C2 : B2);
+            D1: next = s[3] ? D1 : C2;
+            default: next = 3'bxxx;
+        endcase
+    end
+    always @(*) begin
+        case (state)
+            A2: {fr3, fr2, fr1, dfr} = 4'b1111;
+            B1: {fr3, fr2, fr1, dfr} = 4'b0110;
+            B2: {fr3, fr2, fr1, dfr} = 4'b0111;
+            C1: {fr3, fr2, fr1, dfr} = 4'b0010;
+            C2: {fr3, fr2, fr1, dfr} = 4'b0011;
+            D1: {fr3, fr2, fr1, dfr} = 4'b0000;
+            default: {fr3, fr2, fr1, dfr} = 4'bxxxx;
+        endcase
+    end
+endmodule
+
+
+//10.Lemmings1
+//Code:
+module top_module(input clk,input areset,input bump_left,input bump_right,output walk_left,output walk_right); 
+    parameter LEFT=0, RIGHT=1;
+    reg state, next_state;
+    always @(*) begin
+        case(state)
+            LEFT: next_state <= bump_left ? RIGHT : LEFT;
+            RIGHT: next_state <= bump_right ? LEFT : RIGHT; 
+        endcase
+    end
+    always @(posedge clk, posedge areset) begin
+        if(areset) state <= LEFT;
+        else
+            state <= next_state;
+    end
+    assign walk_left = (state == LEFT);
+    assign walk_right = (state == RIGHT);
+endmodule
+
+
+//11.Lemmings2
+//Code:
+module top_module(input clk,input areset,input bump_left,input bump_right,input ground,
+                  output walk_left,output walk_right,output aaah ); 
+    parameter LEFT = 0, RIGHT = 1, LEFT_aah = 2, RIGHT_aah = 3;
+    reg [2:0] state, next_state;
+    always @(posedge clk or posedge areset) begin
+        if (areset) state <= LEFT;
+        else 
+            state <= next_state;
+    end
+    always @(*) begin
+        case (state)
+            LEFT: begin
+                if (ground) next_state <= bump_left ? RIGHT : LEFT;
+                else
+                    next_state <= LEFT_aah;
+            end
+            RIGHT: begin
+                if (ground)next_state <= bump_right ? LEFT : RIGHT;
+                else 
+                    next_state <= RIGHT_aah;
+            end
+            LEFT_aah: begin
+                if (ground)
+                    next_state <= LEFT;
+                else
+                    next_state <= LEFT_aah;
+            end
+            RIGHT_aah: begin
+                if (ground)
+                    next_state <= RIGHT;
+                else
+                    next_state <= RIGHT_aah;
+            end
+        endcase
+    end
+    assign walk_left = (state == LEFT);
+    assign walk_right = (state == RIGHT);
+    assign aaah = ((state == LEFT_aah) || (state == RIGHT_aah));
+endmodule
+
+
+//12.Lemmings3
+//Code:
+module top_module(input clk,input areset,input bump_left,input bump_right,input ground,input dig,
+                  output walk_left,output walk_right,output aaah,output digging); 
+    parameter left = 0, right = 1;
+    parameter left_ground = 2, right_ground = 3;
+    parameter left_dig = 4, right_dig = 5;
+    reg [2:0] state, next_state;
+    always @(posedge clk or posedge areset) begin
+        if (areset) state <= left;
+        else 
+            state <= next_state;
+    end
+    always @(*) begin
+        case (state)
+            left: begin
+                if (ground)
+                    if (dig) next_state <= left_dig;
+                    else
+                        next_state <= bump_left ? right : left;
+                else
+                    next_state <= left_ground;
+            end
+            right: begin
+                if (ground)
+                    if (dig) next_state <= right_dig;
+                    else 
+                        next_state <= bump_right ? left : right;
+                else 
+                    next_state <= right_ground;
+            end
+            left_dig: begin
+                if (ground) next_state <= left_dig;
+                else
+                    next_state <= left_ground;
+            end
+            right_dig: begin
+                if (ground) next_state <= right_dig;
+                else
+                    next_state <= right_ground;
+            end
+            left_ground: begin
+                if (ground) next_state <= left;
+                else 
+                    next_state <= left_ground;
+            end
+            right_ground: begin
+                if (ground) next_state <= right;
+                else
+                    next_state <= right_ground;
+            end
+        endcase
+    end
+    assign walk_left = (state == left);
+    assign walk_right = (state == right);
+    assign aaah = ((state == left_ground) || (state == right_ground));
+    assign digging = ((state == left_dig) || (state == right_dig));
+endmodule
+
+
+//13.Lemmings4
+//Code:
+module top_module(input clk,input areset,input bump_left,input bump_right,input ground,input dig,
+                  output walk_left,output walk_right,output aaah,output digging ); 
+    parameter left=3'd0, right=3'd1, falll=3'd2, fallr=3'd3, digl=3'd4, digr=3'd5, splat=3'd6;
+    reg [2:0] state, next_state;
+    reg [31:0] count;
+    always@(posedge clk or posedge areset) begin
+        if(areset)
+            state <= left;
+        else if(state == falll || state == fallr) begin
+            state <= next_state;
+            count <= count + 1;
+        end
+        else begin
+            state <= next_state;
+            count <= 0;
+        end
+    end
+    always@(*) begin
+        case(state)
+            left: begin
+                if(~ground)         next_state = falll;
+                else if(dig)        next_state = digl;
+                else if(bump_left)  next_state = right;
+                else                next_state = left;
+            end
+            right: begin
+                if(~ground)         next_state = fallr;
+                else if(dig)        next_state = digr;
+                else if(bump_right) next_state = left;
+                else                next_state = right;
+            end
+            falll: begin
+                if(ground) begin
+                    if(count>19)    next_state = splat;
+                    else            next_state = left;
+                end
+                else                next_state = falll;
+            end
+            fallr: begin
+                if(ground) begin
+                    if(count>19)    next_state = splat;
+                    else            next_state = right;
+                end
+                else                next_state = fallr;
+            end
+            digl: begin
+                if(ground)  next_state = digl;
+                else        next_state = falll;
+            end
+            digr: begin
+                if(ground)  next_state = digr;
+                else        next_state = fallr;
+            end
+            splat: begin
+                next_state = splat;
+            end
+        endcase
+    end
+    assign  walk_left = (state == left);
+    assign  walk_right = (state == right);
+    assign  aaah = (state == falll || state == fallr);
+    assign  digging = (state == digl || state == digr);
+endmodule
+
+
+//14.
+//Code:
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
+
+
+
+
+//Code:
